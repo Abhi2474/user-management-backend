@@ -62,7 +62,7 @@ const UserControllers = {
 		const { error } = userSchema.validate(req.body)
 
 		if(error){
-			return next(new Error('fill correctly'))
+			return next(new Error(`${error}`))
 		}
 
         const { name, email, phone } = req.body
@@ -86,6 +86,15 @@ const UserControllers = {
 			}
 			res.status(201).json(document)
 		}
+	},
+	async single_user(req, res, next){
+		const document = await User.findOne({ _id: req.params.id })
+
+		if(!document){
+			return next(new Error('User does not exist'))
+		}
+
+		res.json(document)
 	}
 }
 

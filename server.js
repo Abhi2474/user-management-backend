@@ -1,10 +1,16 @@
 import express from 'express'
 import routes from './routes';
 import mongoose from 'mongoose';
+import cors from 'cors'
+import dotenv from 'dotenv';
+dotenv.config();
+
+const dbUrl = process.env.DB_URL;
+
 
 const app = express()
-const DB_URL = "mongodb+srv://mongoProject:lTEWn5CtZOMrIjw3@cluster0.q2osnnj.mongodb.net/API-assignment"
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
+
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true})
 const db = mongoose.connection
 db.on('error',console.error.bind(console, 'connection error: '))
 db.once('open', ()=>{
@@ -12,6 +18,7 @@ db.once('open', ()=>{
 })
 
 app.use(express.json())
+app.use(cors())
 app.use('/', routes)
 
 app.listen(3000,()=>{
