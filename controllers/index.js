@@ -6,7 +6,7 @@ const UserControllers = {
 		const { error } = userSchema.validate(req.body)
 
 		if(error){
-			return next(new Error('fill correctly'))
+			return next(new Error(`${error}`))
 		}
 
 		const { name, email, phone } = req.body
@@ -15,7 +15,7 @@ const UserControllers = {
 
 		let document
 		if(exist){
-			return next(new Error('already exists'))
+			return next(new Error(`${error}`))
 		}
 		else{
 			try {
@@ -26,7 +26,7 @@ const UserControllers = {
 				})
 			} catch (error) {
 				console.log(error);
-				return next(error)
+				return next(new Error(`${error}`))
 			}
 			res.status(201).json(document)
 		}
@@ -40,7 +40,7 @@ const UserControllers = {
 			documents = await User.find().sort({_id: -1})
 		} catch (error) {
 			console.log(error);
-			return next(error)
+			return next(new Error(`${error}`))
 		}
 
 		return res.json(documents)
